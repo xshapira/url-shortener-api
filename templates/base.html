@@ -9,10 +9,12 @@
     <title>URL Shortener</title>
     <link rel="shortcut icon" href="{% static 'img/favicon.png' %}" />
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script defer src="https://cdn.tailwindcss.com"></script>
     <script defer src="{% static 'js/app.js' %}"></script>
   </head>
 
   <body>
-    <p>hello world</p>
+    {% block content %}
+    {% endblock content %}
   </body>
 </html>
