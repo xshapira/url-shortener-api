@@ -32,7 +32,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = []
 
 PROJECT_APPS = [
-    "url_shortener.apps.UrlShortenerConfig",
+    "shorturls.apps.UrlShortenerConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
