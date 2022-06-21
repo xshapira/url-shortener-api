@@ -25,7 +25,7 @@ class ShortUrlView(View):
 
         data = {
             "success": True,
-            "short_url": "{}".format(url.shorten_url),
+            "short_url": url.shorten_url,
             "url": url.long_url,
         }
         return JsonResponse(data, status=201)

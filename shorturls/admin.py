@@ -5,8 +5,9 @@ from .models import ShortUrl
 
 @admin.register(ShortUrl)
 class ShortUrlAdmin(admin.ModelAdmin):
+    ordering = ("-visits",)
     list_display = (
         "__str__",
         "shorten_url",
+        "visits",
     )
-    # readonly_fields = ("shorten_url",)
