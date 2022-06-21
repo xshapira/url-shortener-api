@@ -14,8 +14,14 @@ class HomeView(TemplateView):
     template_name = "index.html"
 
 
+# exempting the class from csrf to avoid csrf validation error
 @method_decorator(csrf_exempt, name="dispatch")
 class ShortUrlView(View):
+
+    """Calling post function that takes json data, parse it,
+    and creates a new entry in ShortUrl model. It saves and returns
+    a json serialized dictionary."""
+
     def post(self, request):
         data = json.loads(request.body.decode("utf-8"))
         long_url = str(data.get("url"))
@@ -32,6 +38,10 @@ class ShortUrlView(View):
 
 
 def redirect_to_url(request, url_key: str):
+
+    """This function is called in each new short url call
+    and updates the visits of that particular short url."""
+
     url = get_object_or_404(ShortUrl, key=url_key)
     url.visits = url.visits + 1
     url.update()
