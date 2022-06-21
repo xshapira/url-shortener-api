@@ -5,6 +5,8 @@ from django.db import models
 
 class ShortUrl(models.Model):
 
+    """ """
+
     key = models.CharField(
         max_length=7,
         primary_key=True,
@@ -18,12 +20,14 @@ class ShortUrl(models.Model):
     )
 
     def __str__(self):
-        # return f"{self.short_url} - {self.visits} visits."
         return self.key
 
     def save(self, *args, **kwargs):
         if not self.key:
             self.key = self.generate_key()
+        super().save(*args, **kwargs)
+
+    def update(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
     @classmethod

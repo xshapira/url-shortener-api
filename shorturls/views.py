@@ -1,6 +1,5 @@
 import json
 
-from django.contrib.sites.shortcuts import get_current_site
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
@@ -19,12 +18,21 @@ class HomeView(TemplateView):
 class ShortUrlView(View):
     def post(self, request):
         data = json.loads(request.body.decode("utf-8"))
-        # long_url = data.get("url")
-        print(type(data))
+        long_url = str(data.get("url"))
+        url = ShortUrl()
+        url.long_url = long_url
+        url.save()
 
-        return "Somehing"
+        data = {
+            "success": True,
+            "short_url": "{}".format(url.shorten_url),
+            "url": url.long_url,
+        }
+        return JsonResponse(data, status=201)
 
 
 def redirect_to_url(request, url_key: str):
     url = get_object_or_404(ShortUrl, key=url_key)
+    url.visits = url.visits + 1
+    url.update()
     return redirect(url.long_url)
