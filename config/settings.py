@@ -127,3 +127,5 @@ STATICFILES_DIRS = [BASE_DIR.joinpath("config/static")]
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"

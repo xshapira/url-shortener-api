@@ -11,7 +11,6 @@ class ShortUrl(models.Model):
         editable=False,
     )
     long_url = models.URLField(verbose_name="Long URL")
-    short_url = models.CharField(max_length=100)
     visits = models.PositiveIntegerField(default=0, verbose_name="Visits")
     created_at = models.DateTimeField(
         auto_now_add=True,

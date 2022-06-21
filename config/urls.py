@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from shorturls.views import HomeView
+from shorturls.views import HomeView, ShortUrlView, redirect_to_url
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", HomeView.as_view(), name="index"),
+    path("create", ShortUrlView.as_view(), name="create"),
+    path("s/<url_key>", redirect_to_url, name="redirect"),
 ]
