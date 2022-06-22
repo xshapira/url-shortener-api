@@ -1,5 +1,6 @@
 import json
 
+from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
@@ -46,6 +47,6 @@ def redirect_to_url(request, url_key: str):
     and updates the visits of that particular short url."""
 
     url = get_object_or_404(ShortUrl, key=url_key)
-    url.visits = url.visits + 1
-    url.update()
+    url.visits = F("visits") + 1
+    url.save(update_fields=["visits"])
     return redirect(url.long_url)
