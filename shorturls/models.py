@@ -36,12 +36,11 @@ class ShortUrl(models.Model):
     # generating random new key for short url
     @classmethod
     def generate_key(cls) -> str:
-        key = uuid.uuid4().hex[:7]
-        count = 0
-        while cls.objects.filter(key=key).exists() or count > 7:
+        while True:
             key = uuid.uuid4().hex[:7]
-            count += 1
-        return key
+            if cls.objects.filter(key=key).exists():
+                key = uuid.uuid4().hex[:7]
+            return key
 
     # property representation of a short url
     @property
@@ -49,5 +48,4 @@ class ShortUrl(models.Model):
         return f"http://localhost:8000/s/{self.key}"
 
     class Meta:
-        verbose_name = "link"
-        verbose_name_plural = "Most viewed links"
+        verbose_name = "Short Url"
