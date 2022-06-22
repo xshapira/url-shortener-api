@@ -29,10 +29,13 @@ class ShortUrlView(View):
         url.long_url = long_url
         url.save()
 
+        current_host = url.get_current_host(request)
+        url_key = url.get_absolute_url("url_key")
+
         data = {
             "success": True,
-            "short_url": url.shorten_url,
-            "url": url.long_url,
+            "short_url": f"{current_host}{url_key}",
+            "url": long_url,
         }
         return JsonResponse(data, status=201)
 

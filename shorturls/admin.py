@@ -8,6 +8,6 @@ class ShortUrlAdmin(admin.ModelAdmin):
     ordering = ("-visits",)
     list_display = (
         "__str__",
-        "shorten_url",
+        # "created_at",
         "visits",
     )
