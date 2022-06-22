@@ -1,6 +1,6 @@
 import uuid
 
-from django.db import IntegrityError, models
+from django.db import IntegrityError, models, transaction
 from django.urls import reverse
 
 
@@ -41,7 +41,12 @@ class ShortUrl(models.Model):
         while True:
             key = uuid.uuid4().hex[:7]
             try:
-                return ShortUrl.objects.create(key=key, long_url=long_url)
+                # Limit the outcome of a possible exception can have
+                # on any exterior transactions. We want to prevent
+                # the error “current transaction is aborted,
+                # queries ignored until end of transaction block”.
+                with transaction.atomic():
+                    return ShortUrl.objects.create(key=key, long_url=long_url)
             except IntegrityError:
                 continue
 
