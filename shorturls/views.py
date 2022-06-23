@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 
 from .models import ShortUrl
@@ -41,6 +42,8 @@ class ShortUrlView(View):
         return JsonResponse(data, status=201)
 
 
+# make a view only accept GET request method
+@require_http_methods(["GET"])
 def redirect_to_url(request, url_key: str):
 
     """This function is called in each new short url call
