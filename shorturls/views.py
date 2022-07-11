@@ -16,7 +16,7 @@ class HomeView(TemplateView):
     template_name = "index.html"
 
 
-# exempting the class from csrf to avoid csrf validation error
+# Exempting the class from csrf to avoid csrf validation error
 @method_decorator(csrf_exempt, name="dispatch")
 class ShortUrlView(View):
 
@@ -42,7 +42,7 @@ class ShortUrlView(View):
         return JsonResponse(data, status=201)
 
 
-# make a view only accept GET request method
+# Make a view only accept GET request method
 @require_http_methods(["GET"])
 def redirect_to_url(request, url_key: str):
 

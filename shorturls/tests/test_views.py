@@ -9,7 +9,7 @@ from shorturls.views import HomeView
 
 class TestHomeView(TestCase):
     def setUp(self):
-        # this method is called at the beginning of each test
+        # This method is called at the beginning of each test
         self.url = reverse("index")
         self.response = self.client.get(self.url)
         self.factory = RequestFactory()
@@ -18,25 +18,25 @@ class TestHomeView(TestCase):
         settings.DEBUG = False
 
     def tearDown(self):
-        # this method is called at the end of each test
+        # This method is called at the end of each test
         settings.DEBUG = self.debug
 
     def test_home_url_resolves_to_offer_view(self):
         self.assertEquals(resolve(self.url).func.view_class, HomeView)
 
     def test_home_view_name(self):
-        # ensure name of the view is "index"
+        # Ensure name of the view is "index"
         view = resolve(self.url)
         self.assertEqual(view.func.__name__, HomeView.as_view().__name__)
 
     def test_successful_home_view_get_response(self):
-        # ensure the response is 200 OK
+        # Ensure the response is 200 OK
         request = self.factory.get("")
         response = HomeView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
     def test_home_view_returns_correct_html(self):
-        # ensure the response contains the correct html
+        # Ensure the response contains the correct html
         self.assertContains(self.response, "URL Shortener")
         self.assertNotContains(self.response, "hello world")
 
@@ -47,7 +47,7 @@ class TestsViews(TestCase):
         self.list_url = reverse("create")
 
     def test_short_url_POST(self):
-        # create a new short url
+        # Create a new short url
         url = reverse("create")
         data = {"url": "https://duckduckgo.com"}
         response = self.client.post(url, data, content_type="application/json")
@@ -74,7 +74,7 @@ class TestsViews(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_redirect_url_visits(self):
-        # ensure that redirect url visits are incremented
+        # Ensure that redirect url visits are incremented
         url = reverse("create")
         data = {"url": "https://duckduckgo.com"}
         response = self.client.post(url, data, content_type="application/json")
