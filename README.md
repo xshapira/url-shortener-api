@@ -5,7 +5,7 @@ URL.
 
 ## TOCTOU
 
-Concurrency issue referred to `TOCTOU` (Time-of-check time-of-use). Concurrency is the occurrence of two or more events at the same time—two tasks overlap in execution.
+Concurrency is the occurrence of two or more events at the same time—two tasks overlap in execution. Concurrency issue referred to `TOCTOU` (Time-of-check time-of-use).
 
 Our program generates a random key and checks that it doesn’t already exist. Before it has a chance to write a unique shortened URL to the database, another process generates the same key and checks that it doesn’t already exist. Because tasks overlap in execution, we might wind up with a short URL that has been added with the same key after being checked but not utilized.
 
