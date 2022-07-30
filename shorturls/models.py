@@ -54,7 +54,7 @@ class ShortUrl(models.Model):
         return reverse("entry_point", kwargs={"url_key": self.key})
 
     def get_current_host(self, request):
-        scheme = request.is_secure() and "https" or "http"
+        scheme = "https" if request.is_secure() else "http"
         return f"{scheme}://{request.get_host()}"
 
     class Meta:
