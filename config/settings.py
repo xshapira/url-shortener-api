@@ -10,22 +10,62 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import functools
 from pathlib import Path
+from typing import Optional
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DOTENV_DEV = Path(BASE_DIR, ".env")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+DOTENV_PROD = Path(BASE_DIR, "prod.env")
+
+
+class AppSettings(BaseSettings):
+    DEBUG: bool = Field(default=...)
+    SECRET_KEY: str = Field(default=...)
+    POSTGRES_DB: str = Field(default=...)
+    POSTGRES_USER: str = Field(default=...)
+    POSTGRES_PASSWORD: str = Field(default=...)
+    POSTGRES_HOST: str = Field(default=...)
+    POSTGRES_PORT: int = Field(default=...)
+    ALLOWED_HOSTS: list[str] = Field(default=list)
+    CSRF_TRUSTED_ORIGINS: list[str] = Field(default=list)
+    DJANGO_SUPERUSER_USERNAME: Optional[str] = Field(default=None)
+    DJANGO_SUPERUSER_PASSWORD: Optional[str] = Field(default=None)
+    DJANGO_SUPERUSER_EMAIL: Optional[str] = Field(default=None)
+
+    model_config = SettingsConfigDict(case_sensitive=True, env_file=DOTENV_DEV)
+
+
+@functools.cache
+def get_app_settings() -> AppSettings:
+    """
+    We're using `cache` decorator to re-use the same AppSettings object,
+    instead of reading it for each request. The AppSettings object will be
+    created only once, the first time it's called. Then it will return
+    the same object that was returned on the first call, again and again.
+    """
+    app_settings = AppSettings()
+    if app_settings.DEBUG:
+        return app_settings
+
+    return AppSettings(_env_file=DOTENV_PROD, _env_file_encoding="utf-8")
+
+
+config = get_app_settings()
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-hua64!a11gb71k872!crgu+n1s9fc9!xd6ps6390=ni-px^6#2"
+SECRET_KEY = config.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config.DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config.ALLOWED_HOSTS
 
 
 # Application definition
@@ -84,7 +124,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": BASE_DIR / "db",
+        "NAME": config.POSTGRES_DB,
+        "USER": config.POSTGRES_USER,
+        "PASSWORD": config.POSTGRES_PASSWORD,
+        "HOST": config.POSTGRES_HOST,
+        "PORT": config.POSTGRES_PORT,
     }
 }
 
@@ -144,4 +188,4 @@ SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
 
-CSRF_TRUSTED_ORIGINS = ""
+CSRF_TRUSTED_ORIGINS = config.CSRF_TRUSTED_ORIGINS
