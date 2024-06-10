@@ -1,1 +1,12 @@
-# Register your models here.
+from django.contrib import admin
+
+from shorturls.models import ShortUrl
+
+
+@admin.register(ShortUrl)
+class ShortUrlAdmin(admin.ModelAdmin):
+    ordering = ("-visits",)
+    list_display = (
+        "__str__",
+        "visits",
+    )
