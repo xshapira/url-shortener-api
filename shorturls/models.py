@@ -24,6 +24,8 @@ class ShortUrl(models.Model):
 
         If the ShortUrl object doesn't have a key, a new key will be generated using the `generate_key` method before saving the object.
         """
+        if not self.key:
+            self.key = self.generate_key(self.long_url)
         super().save(*args, **kwargs)
 
     def update(self, *args, **kwargs):
