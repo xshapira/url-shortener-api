@@ -18,6 +18,24 @@ class ShortUrl(models.Model):
     def __str__(self):
         return self.key
 
+    def save(self, *args, **kwargs):
+        """
+        Override the default save method to generate a unique key for the ShortUrl object if it doesn't already have one.
+
+        If the ShortUrl object doesn't have a key, a new key will be generated using the `generate_key` method before saving the object.
+        """
+        super().save(*args, **kwargs)
+
+    def update(self, *args, **kwargs):
+        """
+        Update the ShortUrl object without modifying its key.
+
+        This method is used to update the fields of an existing ShortUrl object
+        while preserving its original key. It calls the parent class's `save`
+        method to perform the update.
+        """
+        super().save(*args, **kwargs)
+
     @classmethod
     def generate_key(cls, long_url: str):
         """
