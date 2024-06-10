@@ -9,7 +9,8 @@ package-mode = false
 python = "^3.12"
 django = "5.0.6"
 psycopg = { extras = ["binary"], version = "3.1.19" }
-pydantic = {extras = ["dotenv", "pydantic-settings"], version = "^2.7.3"}
+pydantic = "^2.7.3"
+pydantic-settings = { extras = ["dotenv"], version = "^2.3.1" }
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.8"
