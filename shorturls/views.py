@@ -1,9 +1,12 @@
 import json
 
-from django.http import HttpRequest, JsonResponse
+from django.db.models import F
+from django.http import HttpRequest, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 
 from shorturls.models import ShortUrl
@@ -67,3 +70,33 @@ class ShortUrlView(View):
             return JsonResponse(data, status=201)
         except (json.JSONDecodeError, ValueError) as exc:
             return JsonResponse({"error": str(exc)}, status=400)
+
+
+@require_http_methods(["GET"])
+def redirect_to_url(request: HttpRequest, url_key: str) -> HttpResponseRedirect:
+    """
+    Redirect to the long URL associated with the provided short URL key.
+
+    It handles the redirection from a short URL to its corresponding long URL, incrementing the visit count in the process.
+
+    Notes:
+        - The function is decorated with `@require_http_methods(["GET"])` to make sure that only GET requests are allowed.
+        - The `visits` count of the ShortUrl object is incremented using the
+        `F()` expression to avoid race conditions.
+        - The `update_fields` parameter is used in the `save()` method to specify that only the `visits` field should be updated in the database.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        url_key (str): The unique key of the short URL.
+
+    Returns:
+        HttpResponseRedirect: A redirect response to the long URL associated with the short URL.
+
+    Raises:
+        Http404: If no ShortUrl object is found with the provided `url_key`.
+
+    """
+    url = get_object_or_404(ShortUrl, key=url_key)
+    url.visits = F("visits") + 1
+    url.save(update_fields=["visits"])
+    return redirect(url.long_url)
