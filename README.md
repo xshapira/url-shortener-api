@@ -6,7 +6,7 @@ A URL shortener redirects short URLs to original (lengthy) URLs and keeps track 
 
 Concurrency is the occurrence of two or more events at the same time—two tasks overlap in execution.
 
-TOCTOU(Time-of-Check Time-of-Use) is a type of race condition, and race condition falls under the broader category of concurrency issues. TOCTOU happens when there's a gap between the time when a condition is checked (time of check) and the time when an action is performed based on that check (time of use). In the context of our URL shortener, this can happen when multiple processes try to generate the same short URL key simultaneously
+TOCTOU(Time-of-Check Time-of-Use) is a type of race condition, and race condition falls under the broader category of concurrency issues. TOCTOU happens when there's a gap between the time when a condition is checked (time of check) and the time when an action is performed based on that check (time of use). In the context of our URL shortener, this can happen when multiple processes try to generate the same short URL key simultaneously.
 
 Our program generates a random key and checks that it doesn’t already exist. Before it has a chance to write a unique shortened URL to the database, another process generates the same key and checks that it doesn’t already exist. Because tasks overlap in execution, we might wind up with a short URL that has been added with the same key after being checked but not used.
 
