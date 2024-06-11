@@ -65,6 +65,8 @@ class ShortUrl(models.Model):
                 with transaction.atomic():
                     return ShortUrl.objects.create(key=key, long_url=long_url)
             except IntegrityError:
+                # If key already exists or there's database integrity violation,
+                # generate a new key
                 continue
 
     def get_absolute_url(self, request: HttpRequest) -> str:
