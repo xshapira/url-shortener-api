@@ -77,13 +77,10 @@ def redirect_to_url(request: HttpRequest, url_key: str) -> HttpResponseRedirect:
     """
     Redirect to the long URL associated with the provided short URL key.
 
-    It handles the redirection from a short URL to its corresponding long URL, incrementing the visit count in the process.
+    It handles the redirection from a short URL to its corresponding long URL, incrementing the visit count in the process. Only GET requests are allowed.
 
-    Notes:
-        - The function is decorated with `@require_http_methods(["GET"])` to make sure that only GET requests are allowed.
-        - The `visits` count of the ShortUrl object is incremented using the
-        `F()` expression to avoid race conditions.
-        - The `update_fields` parameter is used in the `save()` method to specify that only the `visits` field should be updated in the database.
+    Note:
+        The `visits` field of the `ShortUrl` model is incremented using `F()` expressions to avoid race conditions.
 
     Args:
         request (HttpRequest): The HTTP request object.
@@ -98,5 +95,6 @@ def redirect_to_url(request: HttpRequest, url_key: str) -> HttpResponseRedirect:
     """
     url = get_object_or_404(ShortUrl, key=url_key)
     url.visits = F("visits") + 1
+    # only `visits` field should be updated in the database
     url.save(update_fields=["visits"])
     return redirect(url.long_url)
