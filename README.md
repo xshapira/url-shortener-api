@@ -32,7 +32,7 @@ To prevent this issue, we use an atomic transaction to make sure that the key ge
 
 ## Incrementing the visit counter
 
-Let's imagine thousands of customers are trying to create the same key at the same time. Then we might generate the exact URL at the same time. The short URL is generated twice, but the visit counter is 1.
+Let's imagine multiple customers are trying to create the same key at the same time. Then we might generate the exact URL at the same time. The short URL is generated twice, but the visit counter is 1.
 
 We can use `F expression` to update the counter (number of redirects for each URL) relative to what is in the database. The visit counter will increment by one and won't be set to a fixed value.
 
