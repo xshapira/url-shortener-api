@@ -71,7 +71,7 @@ class ShortUrl(models.Model):
         """
         Get the absolute URL for the ShortUrl object.
 
-        This method constructs the absolute URL for the ShortUrl object using the `reverse` function. It takes `request` as a parameter to determine the appropriate URL scheme (http or https) based on the request's security status.
+        It constructs the URL using the `reverse` function and the `request` object to determine the appropriate URL scheme (http or https).
 
         Args:
             request (HttpRequest): The HTTP request object.
@@ -85,8 +85,7 @@ class ShortUrl(models.Model):
         """
         Get the current host URL based on the request.
 
-        This method determines the current host URL based on the provided `request` object. It checks if the request is secure (HTTPS) and constructs the appropriate URL scheme (http or https) accordingly.
-        The host name is received from the `get_host()` method.
+        It determines the current host URL based on the `request` object, considering if the request is secure (HTTPS) to construct the appropriate URL scheme.
 
         Args:
             request (HttpRequest): The HTTP request object.
