@@ -1,6 +1,8 @@
 import uuid
 
 from django.db import IntegrityError, models, transaction
+from django.http import HttpRequest
+from django.urls import reverse
 
 
 class ShortUrl(models.Model):
@@ -64,3 +66,33 @@ class ShortUrl(models.Model):
                     return ShortUrl.objects.create(key=key, long_url=long_url)
             except IntegrityError:
                 continue
+
+    def get_absolute_url(self, request: HttpRequest) -> str:
+        """
+        Get the absolute URL for the ShortUrl object.
+
+        This method constructs the absolute URL for the ShortUrl object using the `reverse` function. It takes `request` as a parameter to determine the appropriate URL scheme (http or https) based on the request's security status.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            str: The absolute URL for the ShortUrl object.
+        """
+        return reverse("entry_point", kwargs={"url_key": self.key})
+
+    def get_current_host(self, request: HttpRequest) -> str:
+        """
+        Get the current host URL based on the request.
+
+        This method determines the current host URL based on the provided `request` object. It checks if the request is secure (HTTPS) and constructs the appropriate URL scheme (http or https) accordingly.
+        The host name is received from the `get_host()` method.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            str: The current host URL.
+        """
+        scheme = "https" if request.is_secure() else "http"
+        return f"{scheme}://{request.get_host()}"
