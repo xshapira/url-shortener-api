@@ -50,6 +50,44 @@ def redirect_to_url(request: HttpRequest, url_key: str) -> HttpResponseRedirect:
     return redirect(url.long_url)
 ```
 
+## Getting Started with the Project
+
+To run the project, follow these steps:
+
+Rename the .example.env file to .env
+
+```bash
+mv .example.env .env
+```
+
+Open the `.env` file and fill in the necessary information where indicated.
+
+Build and run the Docker containers using docker-compose.
+
+```bash
+docker-compose up --build
+```
+
+**Accessing the Backend**:
+
+Once the containers are up and running, the server will be accessible at:
+
+```bash
+http://0.0.0.0:8000/
+```
+
+**Using the Django Admin**:
+
+To access the Django Admin interface, use the following URL:
+
+```bash
+http://0.0.0.0:8000/admin/
+```
+
+**Username**: admin
+
+**Password**: admin
+
 ## Create a new short URL
 
 Make HTTP POST request to local API endpoint:
