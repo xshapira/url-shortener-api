@@ -105,6 +105,6 @@ In this example, `http://localhost:8000/s/djpy619` will redirect to the full ori
 
 ## Running tests
 
-```python
-python3 manage.py test shorturls.tests
+```bash
+docker-compose exec django python manage.py test shorturls.tests
 ```
