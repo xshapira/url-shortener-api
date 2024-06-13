@@ -3,6 +3,7 @@ import uuid
 from django.db import IntegrityError, models, transaction
 from django.http import HttpRequest
 from django.urls import reverse
+from django.utils import timezone
 
 
 class ShortUrl(models.Model):
@@ -32,6 +33,8 @@ class ShortUrl(models.Model):
         """
         if not self.key:
             self.key = self.generate_key(self.long_url)
+        if not self.created_at:
+            self.created_at = timezone.now()
         super().save(*args, **kwargs)
 
     def update(self, *args, **kwargs):
