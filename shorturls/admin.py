@@ -9,4 +9,5 @@ class ShortUrlAdmin(admin.ModelAdmin):
     list_display = (
         "__str__",
         "visits",
+        "created_at",
     )
