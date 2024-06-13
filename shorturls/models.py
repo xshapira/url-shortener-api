@@ -16,6 +16,10 @@ class ShortUrl(models.Model):
     )
     long_url = models.URLField(verbose_name="Long URL")
     visits = models.PositiveIntegerField(default=0, verbose_name="Visits")
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Created Date",
+    )
 
     def __str__(self):
         return self.key
