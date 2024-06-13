@@ -93,15 +93,15 @@ http://0.0.0.0:8000/admin/
 Make HTTP POST request to local API endpoint:
 
 ```bash
-$ curl -X POST "http://localhost:8000/create" \
+$ curl -X POST "http://0.0.0.0:8000/create" \
 -H "Content-Type: application/json" \
 -d '{"url": "https://dev.to/xshapira/using-tkinter-with-pyenv-a-simple-two-step-guide-hh5"}'
 
 
-http://localhost:8000/s/djpy619
+http://0.0.0.0:8000/s/djpy619
 ```
 
-In this example, `http://localhost:8000/s/djpy619` will redirect to the full original URL.
+In this example, `http://0.0.0.0:8000/s/djpy619` will redirect to the full original URL.
 
 ## Running tests
 
