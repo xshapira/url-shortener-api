@@ -50,7 +50,7 @@ def redirect_to_url(request: HttpRequest, url_key: str) -> HttpResponseRedirect:
     return redirect(url.long_url)
 ```
 
-## Getting Started with the Project
+## Getting Started
 
 To run the project, follow these steps:
 
