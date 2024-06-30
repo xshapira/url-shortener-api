@@ -27,4 +27,4 @@ jobs:
             Update versions of tools in pre-commit configs to latest version
           labels: dependencies
         env:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.token }}
