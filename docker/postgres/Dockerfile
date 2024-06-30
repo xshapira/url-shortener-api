@@ -1,4 +1,4 @@
-FROM postgres:15-bookworm
+FROM postgres:16-bookworm
 
 COPY ./docker/postgres/maintenance /usr/local/bin/maintenance
 RUN chmod +x /usr/local/bin/maintenance/*
