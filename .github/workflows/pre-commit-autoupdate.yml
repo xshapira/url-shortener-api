@@ -20,10 +20,11 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           branch: update/pre-commit-autoupdate
           title: Auto-update pre-commit hooks
           commit-message: Auto-update pre-commit hooks
           body: |
             Update versions of tools in pre-commit configs to latest version
           labels: dependencies
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
