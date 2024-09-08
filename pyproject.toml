@@ -1,68 +1,53 @@
-[tool.poetry]
-name = ""
+[project]
+name = "url-shortener-api"
 version = "0.0.2"
-description = "URL shortener"
-authors = ["Max Shapira <max@winoutt.com>"]
-package-mode = false
+description = ""
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "django>=5.1.1",
+  "psycopg[binary]>=3.2.1",
+  "pydantic-settings>=2.4.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-django = "5.1.1"
-psycopg = { extras = ["binary"], version = "3.2.1" }
-pydantic = "^2.7.4"
-pydantic-settings = { extras = ["dotenv"], version = "^2.3.4" }
+[tool.uv]
+dev-dependencies = [
+  "ruff>=0.6.4",
+  "basedpyright>=1.17.2",
+  "pre-commit>=3.6.1",
+  "pytest>=8.0.0",
+  "pytest-sugar>=1.0.0",
+  "requests-mock>=1.11.0",
+  "pytest-mock>=3.12.0",
+  "pysnooper>=1.2.0",
+]
 
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.6.0"
-mypy = "^1.10.1"
-pre-commit = "^3.7.1"
-pytest = "^8.2.2"
-pytest-sugar = "^1.0.0"
-requests-mock = "^1.12.1"
-pytest-mock = "^3.14.0"
-pysnooper = "^1.2.0"
-
-[tool.mypy]
-disallow_untyped_defs = true
-disallow_any_unimported = true
-no_implicit_optional = true
-strict_equality = true
-warn_unused_ignores = true
-warn_redundant_casts = true
-warn_return_any = true
-check_untyped_defs = true
-show_error_codes = true
-
-[[tool.mypy.overrides]]
-module = ['tests.*']
-disallow_untyped_defs = false
-strict_equality = false
+[tool.basedpyright]
+typeCheckingMode = "all"
 
 [tool.ruff]
 line-length = 88
 exclude = ['.git', '__pycache__', '__init__.py', '.mypy_cache', '.pytest_cache']
-lint.select = [
+extend-include = ["*.ipynb"]
+
+[tool.ruff.lint]
+select = [
   "E",  # pycodestyle errors
   "W",  # pycodestyle warnings
   "F",  # pyflakes
   "I",  # isort
-  "C",  # flake8-comprehensions
+  "C4", # flake8-comprehensions
   "B",  # flake8-bugbear
   "UP", # pyupgrade
 ]
-lint.ignore = [
+ignore = [
   "E501", # line too long
   "C901", # Comprehension is too complex (11 > 10)
   "W191", # indentation contains tabs
   "E402",
 ]
-lint.unfixable = ["F841"]
-extend-include = ["*.ipynb"]
+unfixable = ["F841"]
 
 [tool.ruff.lint.pyupgrade]
 # Preserve types, even if a file imports `from __future__ import annotations`.
 keep-runtime-typing = true
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"

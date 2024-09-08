@@ -12,9 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import functools
 from pathlib import Path
-from typing import Optional
 
-from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,18 +24,18 @@ DOTENV_PROD = Path(BASE_DIR, "prod.env")
 
 
 class AppSettings(BaseSettings):
-    DEBUG: bool = Field(default=...)
-    SECRET_KEY: str = Field(default=...)
-    POSTGRES_DB: str = Field(default=...)
-    POSTGRES_USER: str = Field(default=...)
-    POSTGRES_PASSWORD: str = Field(default=...)
-    POSTGRES_HOST: str = Field(default=...)
-    POSTGRES_PORT: int = Field(default=...)
-    ALLOWED_HOSTS: list[str] = Field(default=list)
-    CSRF_TRUSTED_ORIGINS: list[str] = Field(default=list)
-    DJANGO_SUPERUSER_USERNAME: Optional[str] = Field(default=None)
-    DJANGO_SUPERUSER_PASSWORD: Optional[str] = Field(default=None)
-    DJANGO_SUPERUSER_EMAIL: Optional[str] = Field(default=None)
+    DEBUG: bool = True
+    SECRET_KEY: str
+    POSTGRES_DB: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_HOST: str
+    POSTGRES_PORT: int
+    ALLOWED_HOSTS: list[str]
+    CSRF_TRUSTED_ORIGINS: list[str]
+    DJANGO_SUPERUSER_USERNAME: str | None
+    DJANGO_SUPERUSER_PASSWORD: str | None
+    DJANGO_SUPERUSER_EMAIL: str | None
 
     model_config = SettingsConfigDict(case_sensitive=True, env_file=DOTENV_DEV)
 
@@ -50,11 +48,11 @@ def get_app_settings() -> AppSettings:
     created only once, the first time it's called. Then it will return
     the same object that was returned on the first call, again and again.
     """
-    app_settings = AppSettings()
+    app_settings = AppSettings()  # pyright: ignore [reportCallIssue]
     if app_settings.DEBUG:
         return app_settings
 
-    return AppSettings(_env_file=DOTENV_PROD, _env_file_encoding="utf-8")
+    return AppSettings(_env_file=DOTENV_PROD, _env_file_encoding="utf-8")  # pyright: ignore [reportCallIssue]
 
 
 config = get_app_settings()

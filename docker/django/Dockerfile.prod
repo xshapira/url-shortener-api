@@ -1,42 +1,49 @@
-FROM python:3.12-slim-bookworm AS base
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 
 ARG APP_HOME=/usr/src/app
 WORKDIR ${APP_HOME}
 
-ARG POETRY_HOME=/usr/local/poetry
-
 ENV PYTHONDONTWRITEBYTECODE 1 \
   PYTHONUNBUFFERED 1 \
-  POETRY_HOME=${POETRY_HOME} \
-  PYTHONPATH=${PYTHONPATH}:${PWD}
-
-ENV PATH="$POETRY_HOME/bin:$PATH"
+  UV_COMPILE_BYTECODE=1 \
+  UV_LINK_MODE=copy
 
 RUN apt update \
   && apt install -y --no-install-recommends curl git libpq-dev gcc libglu1 libpq5 \
   && pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir psycopg psycopg-binary "psycopg[c]" gunicorn \
-  && curl -sSL https://install.python-poetry.org | POETRY_HOME=/usr/local/poetry python3 - \
   && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*
 
-COPY ./pyproject.toml ${APP_HOME}/
+# Install dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+  --mount=type=bind,source=uv.lock,target=uv.lock \
+  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+  uv sync --frozen --no-install-project
 
-RUN poetry config virtualenvs.create false \
-  && poetry install --no-root --no-interaction --no-ansi
+ADD . ${APP_HOME}
 
-FROM base AS final
+RUN --mount=type=cache,target=/root/.cache/uv \
+  uv sync --frozen --no-dev
 
-COPY ./docker/django/entrypoint_prod /usr/src/app/docker/django/entrypoint_prod
+
+# Use a final image without uv
+FROM python:3.12-slim-bookworm
+
+# Copy the application from the builder
+COPY --from=builder --chown=app:app ${APP_HOME} ${APP_HOME}
+
+# Place executables in the environment at the front of the path
+ENV PATH="/usr/src/app/.venv/bin:$PATH"
+
+COPY ./docker/django/entrypoint_prod /usr/src/app/docker/django/entrypoint_production
 COPY ./docker/django/start_production /usr/src/app/docker/django/start_production
 
 RUN chmod +x /usr/src/app/docker/django/start_production \
   && sed -i 's/\r$//g' /usr/src/app/docker/django/start_production
 
-COPY . ${APP_HOME}/
+RUN chmod +x /usr/src/app/docker/django/entrypoint_production
 
-RUN chmod +x /usr/src/app/docker/django/entrypoint_prod
-
-ENTRYPOINT ["/usr/src/app/docker/django/entrypoint_prod"]
+ENTRYPOINT ["/usr/src/app/docker/django/entrypoint_production"]
 
 CMD ["/usr/src/app/docker/django/start_production"]
