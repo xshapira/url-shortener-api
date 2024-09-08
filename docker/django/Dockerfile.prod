@@ -36,13 +36,11 @@ COPY --from=builder --chown=app:app ${APP_HOME} ${APP_HOME}
 # Place executables in the environment at the front of the path
 ENV PATH="/usr/src/app/.venv/bin:$PATH"
 
-COPY ./docker/django/entrypoint_prod /usr/src/app/docker/django/entrypoint_production
-COPY ./docker/django/start_production /usr/src/app/docker/django/start_production
+COPY ./docker/django/entrypoint_prod ${APP_HOME}/docker/django/entrypoint_production
+COPY ./docker/django/start_production ${APP_HOME}/docker/django/start_production
 
-RUN chmod +x /usr/src/app/docker/django/start_production \
-  && sed -i 's/\r$//g' /usr/src/app/docker/django/start_production
-
-RUN chmod +x /usr/src/app/docker/django/entrypoint_production
+RUN chmod +x ${APP_HOME}/docker/django/start_production ${APP_HOME}/docker/django/entrypoint_production \
+  && sed -i 's/\r$//g' ${APP_HOME}/docker/django/start_production ${APP_HOME}/docker/django/entrypoint_production
 
 ENTRYPOINT ["/usr/src/app/docker/django/entrypoint_production"]
 

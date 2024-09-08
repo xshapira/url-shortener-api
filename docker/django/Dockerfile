@@ -39,9 +39,7 @@ ENV PATH="/usr/src/app/.venv/bin:$PATH"
 COPY ./docker/django/entrypoint ${APP_HOME}/docker/django/entrypoint
 COPY ./docker/django/start_dev ${APP_HOME}/docker/django/start_dev
 
-RUN chmod +x ${APP_HOME}/docker/django/start_dev \
-  && sed -i 's/\r$//g' ${APP_HOME}/docker/django/start_dev
-
-RUN chmod +x ${APP_HOME}/docker/django/entrypoint
+RUN chmod +x ${APP_HOME}/docker/django/start_dev ${APP_HOME}/docker/django/entrypoint \
+  && sed -i 's/\r$//g' ${APP_HOME}/docker/django/start_dev ${APP_HOME}/docker/django/entrypoint
 
 ENTRYPOINT ["/usr/src/app/docker/django/entrypoint"]
