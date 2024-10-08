@@ -28,7 +28,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 
 # Use a final image without uv
-FROM python:3.12-slim-bookworm
+FROM python:3.13-slim-bookworm
 
 # Copy the application from the builder
 COPY --from=builder --chown=app:app ${APP_HOME} ${APP_HOME}
