@@ -15,6 +15,9 @@ help:
 dev:
 	${ARGS} $(COMPOSE) --env-file ./.env -f docker-compose.yaml up --build --watch
 
+test:
+	$(COMPOSE) exec django python manage.py test shorturls.tests
+
 # Stop and remove containers
 down:
 	$(COMPOSE) --env-file ./.env -f docker-compose.yaml down
