@@ -1,7 +1,7 @@
 #!/bin/sh
 
-uv run /usr/src/app/manage.py flush --no-input
-uv run /usr/src/app/manage.py makemigrations
-uv run /usr/src/app/manage.py migrate
-uv run /usr/src/app/manage.py createsuperuser --noinput
-uv run /usr/src/app/manage.py runserver 0.0.0.0:8000
+uv run python /usr/src/app/manage.py flush --no-input
+uv run python /usr/src/app/manage.py makemigrations
+uv run python /usr/src/app/manage.py migrate
+uv run python /usr/src/app/manage.py createsuperuser --noinput
+uv run python /usr/src/app/manage.py runserver 0.0.0.0:8000
