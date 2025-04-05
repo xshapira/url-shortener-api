@@ -1,5 +1,3 @@
-version: '3.8'
-
 volumes:
   postgres-data-dev:
   postgres-data-backups-dev:
@@ -25,24 +23,24 @@ services:
     image: url-shortener-backend
     volumes:
       - .:/usr/src/app
-      - ./.env:/usr/src/app/.env
+      # - ./.env:/usr/src/app/.env
     command: /usr/src/app/docker/django/start_dev
     ports:
       - 8000:8000
-    develop:
-      # Create a `watch` configuration to update the app
-      # https://docs.docker.com/compose/file-watch/#compose-watch-versus-bind-mounts
-      watch:
-        # Sync the working directory with the `/app` directory in the container
-        - action: sync
-          path: .
-          target: /usr/src/app
-          # Exclude the project virtual environment
-          ignore:
-            - .venv/
-        # Rebuild the image on changes to the `pyproject.toml`
-        - action: rebuild
-          path: ./pyproject.toml
+    # develop:
+    #   # Create a `watch` configuration to update the app
+    #   # https://docs.docker.com/compose/file-watch/#compose-watch-versus-bind-mounts
+    #   watch:
+    #     # Sync the working directory with the `/app` directory in the container
+    #     - action: sync
+    #       path: .
+    #       target: /usr/src/app
+    #       # Exclude the project virtual environment
+    #       ignore:
+    #         - .venv/
+    #     # Rebuild the image on changes to the `pyproject.toml`
+    #     - action: rebuild
+    #       path: ./pyproject.toml
 
     env_file:
       - ./.env
