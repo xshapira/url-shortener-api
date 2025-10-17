@@ -1,4 +1,4 @@
-FROM python:3.13-slim-bookworm AS builder
+FROM python:3.14-slim-bookworm AS builder
 
 ARG APP_HOME=/usr/src/app
 WORKDIR ${APP_HOME}
